@@ -2,8 +2,12 @@ import pytest
 from pcap_summary.pcap_summary import *
 
 
+def pcap_path():
+    return 'tests/mock_data/http.pcap' if os.path.exists('tests/mock_data/http.pcap') else 'mock_data/http.pcap'
+
+
 def test_read_pcap():
-    flows = read_pcap('tests\mock_data\http.pcap')
+    flows = read_pcap(pcap_path())
     assert len(flows) == 95
 
 
@@ -26,13 +30,13 @@ def test_increment_count():
 
 
 def test_summarize_packets():
-    flows = read_pcap('tests\mock_data\http.pcap')
+    flows = read_pcap(pcap_path())
     flows_with_count = summarize_packets(flows)
     assert len(flows_with_count) == 20
 
 
 def test_filter_flows():
-    flows = read_pcap('tests\mock_data\http.pcap')
+    flows = read_pcap(pcap_path())
     flows_with_count = summarize_packets(flows)
     filtered = filter_flows(flows_with_count, '174.137.42.75')
     assert len(filtered) == 5
